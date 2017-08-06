@@ -61,6 +61,7 @@ public class OrderListController extends HttpServlet {
 	}
 
 	private boolean compareCheckAndCount(HttpServletRequest request) {
+		boolean rezult = false;
 		Map<String, String> checkMap = new HashMap<>();
 		Map<String, Integer> countMap = new HashMap<>();
 
@@ -70,14 +71,15 @@ public class OrderListController extends HttpServlet {
 			for (Map.Entry<String, String> entry : checkMap.entrySet()) {
 				String num = entry.getKey().replace(JSP_CHECK_KEY, "");
 				if (countMap.containsKey("count" + num)) {
-					return true;
+					rezult = true;
+
 				}
 			}
 			errorInCount = true;
 		} else {
 			errorInCheck = true;
 		}
-		return false;
+		return rezult;
 	}
 
 	private void divideParameters(Map<String, String> checkMap, Map<String, Integer> countMap, HttpServletRequest request) {

@@ -23,4 +23,9 @@ public class DtoFactory {
 		return loadAllCoffeeType;
 	}
 
+	public void saveCoffeeOrder() {
+		DaoFactory daoFactory = DaoFactory.getMySqlFactory();
+		/// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	}
+
 }

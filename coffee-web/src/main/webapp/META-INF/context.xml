@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Context>
+  <!-- 
+	<Resource name="jdbc/coffee_db_server" 
+			  auth="Container" 
+			  type="javax.sql.DataSource" 
+			  url="jdbc:mysql://localhost:3306/coffee_db" 
+			  driverClassName="com.mysql.cj.jdbc.Driver" 
+			  username="root" 
+			  password="root" 
+			  maxActive="100"
+			  maxWait="10000"
+			  maxIdle="30"/>
+			   -->
+	<!-- <ResourceLink name="jdbc/coffee_db_context" global="jdbc/coffee_db_server" type="javax.sql.DataSource"/> -->
+</Context>

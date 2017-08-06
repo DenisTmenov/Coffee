@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.coffee</groupId>
+	<artifactId>coffee</artifactId>
+	<version>${project.version}</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>coffee-dao</module>
+		<module>coffee-entity</module>
+		<module>coffee-factory</module>
+    <module>coffee-i18n</module>
+    <module>coffee-migration</module>
+    <module>coffee-services</module>
+    <module>coffee-settings</module>
+    <module>cofee-utils</module>
+    <module>coffee-web</module>
+  </modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.version>0.0.1-SNAPSHOT</project.version>
+		<junit.version>3.8.1</junit.version>
+		<flyway.version>4.2.0</flyway.version>
+		<servlet.version>3.1.0</servlet.version>
+		<javax.mail.version>1.5.6</javax.mail.version>
+		<mysql.connector.version>6.0.6</mysql.connector.version>
+		<maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
+		<commons.dbcp2.version>2.1.1</commons.dbcp2.version>
+		<slf4j.api.version>1.7.25</slf4j.api.version>
+		<slf4j.log4j12.version>1.7.25</slf4j.log4j12.version>
+		<mysql.connector.java.version>5.1.43</mysql.connector.java.version>
+		<jstl.version>1.2</jstl.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

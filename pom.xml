@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.coffee</groupId>
 	<artifactId>coffee</artifactId>
@@ -10,13 +11,13 @@
 		<module>coffee-dao</module>
 		<module>coffee-entity</module>
 		<module>coffee-factory</module>
-    <module>coffee-i18n</module>
-    <module>coffee-migration</module>
-    <module>coffee-services</module>
-    <module>coffee-settings</module>
-    <module>cofee-utils</module>
-    <module>coffee-web</module>
-  </modules>
+		<module>coffee-i18n</module>
+		<module>coffee-migration</module>
+		<module>coffee-services</module>
+		<module>coffee-settings</module>
+		<module>coffee-utils</module>
+		<module>coffee-web</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

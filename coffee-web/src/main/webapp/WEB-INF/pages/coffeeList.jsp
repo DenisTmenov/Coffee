@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- My Script -->
 <script src="script/onlyNumbers.js"></script>
@@ -32,7 +32,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="4" align="right"><input type="submit"
+				<td colspan="4" align="right"><font color="red">${ERROR_IN_COUNT} ${ERROR_IN_CHECK}</font> <input type="submit"
 					class="btn btn-primary" id="btnMakeOrder" name="btnMakeOrder"
 					value="<fmt:message bundle="${table_msgs}" key="btnMakeOrder" />" /></td>
 			</tr>

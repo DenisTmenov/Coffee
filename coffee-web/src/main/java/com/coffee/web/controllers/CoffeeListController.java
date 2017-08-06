@@ -23,6 +23,7 @@ public class CoffeeListController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
+
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_MENU, request, response);
 
@@ -30,6 +31,8 @@ public class CoffeeListController extends HttpServlet {
 
 		HttpUtils.includeView(LinkKeeper.JSP_COFFEE_LIST, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_FOOTER, request, response);
+
+		cleanSessionOfErrors(request);
 	}
 
 	private void transferDataFromDatabaseToThisPage(HttpServletRequest request) {
@@ -56,6 +59,11 @@ public class CoffeeListController extends HttpServlet {
 		}
 
 		session.setAttribute("CoffeeTypeList", result);
+	}
+
+	private void cleanSessionOfErrors(HttpServletRequest request) {
+		request.getSession().removeAttribute(OrderListController.ERROR_CHECK_KEY);
+		request.getSession().removeAttribute(OrderListController.ERROR_COUNT_KEY);
 	}
 
 }

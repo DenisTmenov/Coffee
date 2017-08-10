@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.coffee.domian.CoffeeListDto;
 import com.coffee.entity.CoffeeTypeEntity;
 import com.coffee.utils.HttpUtils;
 import com.coffee.utils.LinkKeeper;
@@ -36,8 +37,8 @@ public class OrderListController extends HttpServlet {
 	private boolean errorInCheck = false;
 	private boolean errorInCount = false;
 
-	private List<CoffeeTypeEntity> coffeeTypeEntity= new ArrayList<>();
-	private List<CoffeeTypeEntity> order = new ArrayList<>();
+	private List<CoffeeTypeEntity> coffeeTypeEntity = new ArrayList<>();
+	private List<CoffeeListDto> order = new ArrayList<>();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -53,8 +54,6 @@ public class OrderListController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
-
-		getCoffeeList(request);
 
 		if (buttonIsEnter(request)) {
 			if (compareCheckAndCount(request)) {
@@ -76,6 +75,7 @@ public class OrderListController extends HttpServlet {
 		Map<String, String> checkMap = new HashMap<>();
 		Map<String, Integer> countMap = new HashMap<>();
 
+		getCoffeeList(request);
 		divideParameters(checkMap, countMap, request);
 
 		if (checkMap.size() > 0) {
@@ -83,10 +83,19 @@ public class OrderListController extends HttpServlet {
 				String num = entry.getKey().replace(JSP_CHECK_KEY, "");
 				if (countMap.containsKey("count" + num)) {
 					rezult = true;
+					Integer count = countMap.get("count" + num);
 					for (CoffeeTypeEntity coffee : coffeeTypeEntity) {
 						Integer id = coffee.getId();
 						if (id == Integer.valueOf(num)) {
-							order.add(coffee);
+
+							CoffeeListDto dto = new CoffeeListDto();
+							dto.setCount(count);
+							dto.setId(id);
+							dto.setPrice(coffee.getPrice());
+							dto.setTotalPrice(count * coffee.getPrice());
+							dto.setTypeName(coffee.getTypeName());
+
+							order.add(dto);
 						}
 					}
 				}
@@ -162,8 +171,8 @@ public class OrderListController extends HttpServlet {
 			session.setAttribute(ERROR_CHECK_KEY, ERROR_CHECK_VALUE);
 		} else if (errorInCount) {
 			session.setAttribute(ERROR_COUNT_KEY, ERROR_COUNT_VALUE);
-		} 
-		
+		}
+
 		if (order.size() > 0) {
 			session.setAttribute(USER_MADE_CHOICE_OK, order);
 		}

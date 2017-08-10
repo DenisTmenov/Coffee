@@ -28,6 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.coffee</groupId>
+			<artifactId>coffee-domian</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.coffee</groupId>
 			<artifactId>coffee-factory</artifactId>
 			<version>${project.version}</version>
 		</dependency>

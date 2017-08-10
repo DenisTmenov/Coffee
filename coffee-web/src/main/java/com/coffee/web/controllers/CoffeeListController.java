@@ -19,6 +19,9 @@ import com.coffee.utils.LinkKeeper;
 @WebServlet("/CoffeeList")
 public class CoffeeListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String COFFEE_TYPE_LIST = "CoffeeTypeList";
+	public static final Character DISABLE_COFFEE_ARGUMENT = 'Y';
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -52,13 +55,14 @@ public class CoffeeListController extends HttpServlet {
 
 		for (CoffeeTypeEntity coffeeTypeEntity : coffeeList) {
 			Character disabled = coffeeTypeEntity.getDisabled();
-			if (disabled.equals('Y')) {
+			if (disabled.equals(DISABLE_COFFEE_ARGUMENT)) {
 				continue;
 			}
 			result.add(coffeeTypeEntity);
 		}
 
-		session.setAttribute("CoffeeTypeList", result);
+		session.setAttribute(COFFEE_TYPE_LIST, result);
+		
 	}
 
 	private void cleanSessionOfErrors(HttpServletRequest request) {

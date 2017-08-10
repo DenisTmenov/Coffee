@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 	
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <fmt:setBundle basename="com.coffee.i18n.orderList.messagesAddress" var="tableAddress_msgs"/>
 <fmt:setBundle basename="com.coffee.i18n.orderList.messagesOrder" var="tableOrder_msgs"/>
@@ -48,15 +49,18 @@
 		</tr>
 	</thead>
 	<tbody>
+		<c:set var="sumCost" value="0"/>
+		<c:forEach var="choice" items="${userChoice}">
 		<tr>
-			<td>Очень крепкий и горячий кофе.</td>
-			<td>20 TGR</td>
-			<td>3</td>
+			<td>${choice.getTypeName()}</td>
+			<td>${choice.getPrice()}</td>
+			<td>${choice.getCount()}</td>
 			<td>TGR</td>
 		</tr>
+			  </c:forEach>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyTotal" />:</b></td>
-			<td>60 TGR</td>
+			<td><c:out value="${sumCost}"/> TGR</td>
 		</tr>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyDelivery" />:</b></td>

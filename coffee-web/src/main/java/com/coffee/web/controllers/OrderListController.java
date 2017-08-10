@@ -1,8 +1,10 @@
 package com.coffee.web.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.coffee.entity.CoffeeTypeEntity;
 import com.coffee.utils.HttpUtils;
 import com.coffee.utils.LinkKeeper;
 
@@ -24,6 +27,7 @@ public class OrderListController extends HttpServlet {
 	public static final String ERROR_CHECK_VALUE = "Any coffee is not enter!!!";
 	public static final String ERROR_COUNT_KEY = "ERROR_IN_COUNT";
 	public static final String ERROR_COUNT_VALUE = "Enter count!!!";
+	public static final String USER_MADE_CHOICE_OK = "userChoice";
 
 	private final String JSP_CHECK_KEY = "check";
 	private final String JSP_CHECK_VALUE = "on";
@@ -32,10 +36,13 @@ public class OrderListController extends HttpServlet {
 	private boolean errorInCheck = false;
 	private boolean errorInCount = false;
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpUtils.setEncoding(request, response);
+	private List<CoffeeTypeEntity> coffeeTypeEntity= new ArrayList<>();
+	private List<CoffeeTypeEntity> order = new ArrayList<>();
 
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpUtils.setEncoding(request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_MENU, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_ORDER_LIST, request, response);
@@ -43,14 +50,18 @@ public class OrderListController extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
+
+		getCoffeeList(request);
 
 		if (buttonIsEnter(request)) {
 			if (compareCheckAndCount(request)) {
+				setAttributsInSession(request);
 				response.sendRedirect(LinkKeeper.PAGE_ORDER_LIST);
 			} else {
-				setAttrebutInSession(request);
+				setAttributsInSession(request);
 				response.sendRedirect(LinkKeeper.PAGE_COFFEE_LIST);
 			}
 		}
@@ -72,7 +83,12 @@ public class OrderListController extends HttpServlet {
 				String num = entry.getKey().replace(JSP_CHECK_KEY, "");
 				if (countMap.containsKey("count" + num)) {
 					rezult = true;
-
+					for (CoffeeTypeEntity coffee : coffeeTypeEntity) {
+						Integer id = coffee.getId();
+						if (id == Integer.valueOf(num)) {
+							order.add(coffee);
+						}
+					}
 				}
 			}
 			errorInCount = true;
@@ -82,7 +98,8 @@ public class OrderListController extends HttpServlet {
 		return rezult;
 	}
 
-	private void divideParameters(Map<String, String> checkMap, Map<String, Integer> countMap, HttpServletRequest request) {
+	private void divideParameters(Map<String, String> checkMap, Map<String, Integer> countMap,
+			HttpServletRequest request) {
 		Map<String, String> parameters = getMapParametersFromRequest(request);
 
 		for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -138,15 +155,17 @@ public class OrderListController extends HttpServlet {
 		return entry.getValue().matches(regex);
 	}
 
-	private void setAttrebutInSession(HttpServletRequest request) {
+	private void setAttributsInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		cleanSessionOfErrors(request);
 		if (errorInCheck) {
 			session.setAttribute(ERROR_CHECK_KEY, ERROR_CHECK_VALUE);
-		}
-
-		if (errorInCount) {
+		} else if (errorInCount) {
 			session.setAttribute(ERROR_COUNT_KEY, ERROR_COUNT_VALUE);
+		} 
+		
+		if (order.size() > 0) {
+			session.setAttribute(USER_MADE_CHOICE_OK, order);
 		}
 
 		cleanBooleans();
@@ -160,6 +179,19 @@ public class OrderListController extends HttpServlet {
 	private void cleanBooleans() {
 		errorInCheck = false;
 		errorInCount = false;
+	}
+
+	// !!!!!!!!!!!!!!!!!!!!!!!!!
+
+	@SuppressWarnings("unchecked")
+	private void getCoffeeList(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		coffeeTypeEntity = (List<CoffeeTypeEntity>) session.getAttribute(CoffeeListController.COFFEE_TYPE_LIST);
+		for (CoffeeTypeEntity coffeeTypeEntity : coffeeTypeEntity) {
+			System.out.println(coffeeTypeEntity.getTypeName() + " " + coffeeTypeEntity.getDisabled() + " "
+					+ coffeeTypeEntity.getId() + " " + coffeeTypeEntity.getPrice());
+		}
+
 	}
 
 }

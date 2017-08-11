@@ -49,28 +49,29 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:set var="sumCost" value="0"/>
+		
 		<c:forEach var="choice" items="${userChoice}">
 		<tr>
 			<td>${choice.getTypeName()}</td>
 			<td>${choice.getPrice()}</td>
 			<td>${choice.getCount()}</td>
-			<td>TGR</td>
+			<td>${choice.getTotalPrice()} TGR</td>
+			
 		</tr>
 			  </c:forEach>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyTotal" />:</b></td>
-			<td><c:out value="${sumCost}"/> TGR</td>
+			<td>${sumCost} TGR</td>
 		</tr>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyDelivery" />:</b></td>
-			<td>5 TGR</td>
+			<td>${transport} TGR</td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyTotal" />:</b></td>
-			<td>65 TGR</td>
+			<td>${totalCost} TGR</td>
 		</tr>
 	</tfoot>
 

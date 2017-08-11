@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.coffee.entity.CoffeeTypeEntity;
+import com.coffee.domian.CoffeeListDto;
 import com.coffee.factory.DtoFactory;
 import com.coffee.utils.HttpUtils;
 import com.coffee.utils.LinkKeeper;
@@ -19,12 +19,13 @@ import com.coffee.utils.LinkKeeper;
 @WebServlet("/CoffeeList")
 public class CoffeeListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String COFFEE_TYPE_LIST = "CoffeeTypeList";
 	public static final Character DISABLE_COFFEE_ARGUMENT = 'Y';
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
 
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
@@ -39,21 +40,21 @@ public class CoffeeListController extends HttpServlet {
 	}
 
 	private void transferDataFromDatabaseToThisPage(HttpServletRequest request) {
-		List<CoffeeTypeEntity> coffeeType = loadDataFromDB();
+		List<CoffeeListDto> coffeeType = loadDataFromDB();
 		setAttributeInSession(coffeeType, request);
 	}
 
-	private List<CoffeeTypeEntity> loadDataFromDB() {
+	private List<CoffeeListDto> loadDataFromDB() {
 		DtoFactory mySqlFactory = DtoFactory.getFactory();
-		List<CoffeeTypeEntity> coffeeType = mySqlFactory.getAllCoffeeType();
+		List<CoffeeListDto> coffeeType = mySqlFactory.getAllCoffeeType();
 		return coffeeType;
 	}
 
-	private void setAttributeInSession(List<CoffeeTypeEntity> coffeeList, HttpServletRequest request) {
+	private void setAttributeInSession(List<CoffeeListDto> coffeeList, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		List<CoffeeTypeEntity> result = new ArrayList<>();
+		List<CoffeeListDto> result = new ArrayList<>();
 
-		for (CoffeeTypeEntity coffeeTypeEntity : coffeeList) {
+		for (CoffeeListDto coffeeTypeEntity : coffeeList) {
 			Character disabled = coffeeTypeEntity.getDisabled();
 			if (disabled.equals(DISABLE_COFFEE_ARGUMENT)) {
 				continue;
@@ -62,7 +63,7 @@ public class CoffeeListController extends HttpServlet {
 		}
 
 		session.setAttribute(COFFEE_TYPE_LIST, result);
-		
+
 	}
 
 	private void cleanSessionOfErrors(HttpServletRequest request) {

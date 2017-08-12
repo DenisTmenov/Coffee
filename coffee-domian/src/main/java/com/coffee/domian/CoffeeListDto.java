@@ -11,7 +11,7 @@ public class CoffeeListDto implements Serializable {
 	private Integer count;
 	private Character disabled;
 	private Double totalPrice;
-	private Boolean checked;
+	private String checked;
 
 	public Integer getId() {
 		return id;
@@ -61,11 +61,11 @@ public class CoffeeListDto implements Serializable {
 		this.totalPrice = totalPrice;
 	}
 
-	public Boolean getChecked() {
+	public String getChecked() {
 		return checked;
 	}
 
-	public void setChecked(Boolean checked) {
+	public void setChecked(String checked) {
 		this.checked = checked;
 	}
 
@@ -132,8 +132,7 @@ public class CoffeeListDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CoffeeListDto [id=" + id + ", typeName=" + typeName + ", price=" + price + ", count=" + count
-				+ ", disabled=" + disabled + ", totalPrice=" + totalPrice + ", checked=" + checked + "]";
+		return "CoffeeListDto [id=" + id + ", typeName=" + typeName + ", price=" + price + ", count=" + count + ", disabled=" + disabled + ", totalPrice=" + totalPrice + ", checked=" + checked + "]";
 	}
 
 }

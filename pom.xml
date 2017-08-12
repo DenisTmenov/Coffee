@@ -22,7 +22,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.version>0.0.1-SNAPSHOT</project.version>
+		<project.version>0.0.2-SNAPSHOT</project.version>
 		<junit.version>3.8.1</junit.version>
 		<flyway.version>4.2.0</flyway.version>
 		<servlet.version>3.1.0</servlet.version>

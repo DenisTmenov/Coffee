@@ -17,10 +17,19 @@
 			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.coffee</groupId>
+			<artifactId>coffee-domian</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.coffee</groupId>
 			<artifactId>coffee-entity</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.coffee</groupId>
+			<artifactId>coffee-utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

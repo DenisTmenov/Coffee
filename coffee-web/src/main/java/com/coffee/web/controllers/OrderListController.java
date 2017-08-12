@@ -23,10 +23,10 @@ public class OrderListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public static final String BUTTON_NAME = "btnMakeOrder";
-	public static final String ERROR_CHECK_KEY = "ERROR_IN_CHECK";
-	public static final String ERROR_CHECK_VALUE = "Any coffee is not enter!!!";
-	public static final String ERROR_COUNT_KEY = "ERROR_IN_COUNT";
-	public static final String ERROR_COUNT_VALUE = "Enter count!!!";
+	public static final String CHECK_NOT_EXISTS_CODE = "check.not.exists";
+	public static final String CHECK_NOT_EXISTS_VALUE = "Any coffee is not enter!!!";
+	public static final String COUNT_NOT_EXISTS_CODE = "count.not.exists";
+	public static final String COUNT_NOT_EXISTS_VALUE = "Enter count!!!";
 	public static final String USER_CHOICE = "userChoice";
 	public static final String TRANSPORT_COST_KEY = "transport";
 	public static final Double TRANSPORT_COST_VALUE = 5.0;
@@ -37,18 +37,16 @@ public class OrderListController extends HttpServlet {
 	private final String JSP_CHECK_VALUE = "on";
 	private final String JSP_COUNT_KEY = "count";
 
-	private boolean errorInCheck;
-	private boolean errorInCount;
-
 	private Double sumCost;
 	private Double totalCost;
 
 	private List<CoffeeListDto> coffeeDto;
 	private List<CoffeeListDto> order;
+	private Map<String, String> errorMap;
+	private HttpSession session;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_MENU, request, response);
@@ -57,14 +55,15 @@ public class OrderListController extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
+
+		session = request.getSession();
+		errorMap = new HashMap<>();
 
 		sumCost = 0.0;
 		totalCost = 0.0;
-		errorInCheck = false;
-		errorInCount = false;
+
 		coffeeDto = new ArrayList<>();
 		order = new ArrayList<>();
 
@@ -73,14 +72,16 @@ public class OrderListController extends HttpServlet {
 				setAttributsInSession(request);
 				response.sendRedirect(LinkKeeper.PAGE_ORDER_LIST);
 			} else {
-				setAttributsInSession(request);
 				response.sendRedirect(LinkKeeper.PAGE_COFFEE_LIST);
 			}
+		} else {
+			session.removeAttribute(LinkKeeper.VALIDATION_ERRORS);
+			response.sendRedirect(LinkKeeper.PAGE_COFFEE_LIST);
 		}
 	}
 
 	private boolean buttonIsEnter(HttpServletRequest request) {
-		return !request.getParameter(BUTTON_NAME).isEmpty();
+		return HttpUtils.isParameterExists(request, BUTTON_NAME);
 	}
 
 	private boolean compareCheckAndCount(HttpServletRequest request) {
@@ -116,12 +117,14 @@ public class OrderListController extends HttpServlet {
 					}
 
 				} else {
-					errorInCount = true;
+					errorMap.put(COUNT_NOT_EXISTS_CODE, COUNT_NOT_EXISTS_VALUE);
+					session.setAttribute(LinkKeeper.VALIDATION_ERRORS, errorMap);
 				}
 			}
 
 		} else {
-			errorInCheck = true;
+			errorMap.put(CHECK_NOT_EXISTS_CODE, CHECK_NOT_EXISTS_VALUE);
+			session.setAttribute(LinkKeeper.VALIDATION_ERRORS, errorMap);
 		}
 
 		totalCost += sumCost + TRANSPORT_COST_VALUE;
@@ -140,8 +143,7 @@ public class OrderListController extends HttpServlet {
 		return dto;
 	}
 
-	private void divideParameters(Map<String, String> checkMap, Map<String, Integer> countMap,
-			HttpServletRequest request) {
+	private void divideParameters(Map<String, String> checkMap, Map<String, Integer> countMap, HttpServletRequest request) {
 		Map<String, String> parameters = getMapParametersFromRequest(request);
 
 		for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -200,14 +202,8 @@ public class OrderListController extends HttpServlet {
 	private void setAttributsInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		cleanSessionOfErrors(request);
-		if (errorInCheck) {
-			session.setAttribute(ERROR_CHECK_KEY, ERROR_CHECK_VALUE);
-		} else if (errorInCount) {
-			session.setAttribute(ERROR_COUNT_KEY, ERROR_COUNT_VALUE);
-		}
-
+		// !!!!!!!!!
 		if (order.size() > 0) {
-			cleanSessionOfErrors(request);
 			session.setAttribute(USER_CHOICE, order);
 			session.setAttribute(SUM_COST_KEY, sumCost);
 			session.setAttribute(TRANSPORT_COST_KEY, TRANSPORT_COST_VALUE);
@@ -217,14 +213,14 @@ public class OrderListController extends HttpServlet {
 	}
 
 	private void cleanSessionOfErrors(HttpServletRequest request) {
-		request.getSession().removeAttribute(OrderListController.ERROR_CHECK_KEY);
-		request.getSession().removeAttribute(OrderListController.ERROR_COUNT_KEY);
+
 	}
 
 	@SuppressWarnings("unchecked")
 	private void getCoffeeList(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		coffeeDto = (List<CoffeeListDto>) session.getAttribute(CoffeeListController.COFFEE_TYPE_LIST);
+		// coffeeDto = (List<CoffeeListDto>)
+		// session.getAttribute(CoffeeListController.COFFEE_TYPE_LIST);
 	}
 
 }

@@ -3,8 +3,9 @@
 	
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<fmt:requestEncoding value="UTF-8" />
 
-<fmt:setBundle basename="com.coffee.i18n.orderList.messagesAddress" var="tableAddress_msgs"/>
+<fmt:setBundle basename="com.coffee.i18n.orderList.messagesAddress" var="tableAddress_msgs" />
 <fmt:setBundle basename="com.coffee.i18n.orderList.messagesOrder" var="tableOrder_msgs"/>
 <fmt:setBundle basename="com.coffee.i18n.orderList.messagesLink" var="link_msgs"/>
 
@@ -18,8 +19,8 @@
 		<tbody>
 			<tr>
 				<td><b><fmt:message bundle="${tableAddress_msgs}" key="tableFullName" /></b></td>
-				<td><input type="text" class="text" name="contactName"
-					id="contactName" /></td>
+				<td><input type="text" class="text" name="fullname"
+					id="fullname" /></td>
 			</tr>
 			<tr>
 				<td><b><fmt:message bundle="${tableAddress_msgs}" key="tableAddress" /></b></td>
@@ -29,9 +30,9 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="2" align="right"><input type="submit" name="btnOK"
-					id="btnOK" class="btn btn-primary" value="<fmt:message bundle="${tableAddress_msgs}" key="btnOrder" />"
-					onclick="document.location.href='Order'" /></td>
+				<td colspan="2" align="right"><input type="submit" name="btnOrderOK"
+					id="btnOrderOK" class="btn btn-primary" value="<fmt:message bundle="${tableAddress_msgs}" key="btnOrder" />"
+					 /></td>
 			</tr>
 		</tfoot>
 	</table>

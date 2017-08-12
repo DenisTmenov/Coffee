@@ -2,6 +2,7 @@ package com.coffee.utils;
 
 public final class LinkKeeper {
 	public static final String VALIDATION_ERRORS = "validationErrors";
+	public static final String USER_CHOICE = "UserChoice";
 
 	public static final String PAGE_COFFEE_LIST = "CoffeeList";
 	public static final String PAGE_ORDER_LIST = "OrderList";

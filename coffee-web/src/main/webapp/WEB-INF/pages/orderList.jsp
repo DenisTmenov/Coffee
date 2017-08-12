@@ -51,7 +51,7 @@
 	</thead>
 	<tbody>
 		
-		<c:forEach var="choice" items="${userChoice}">
+		<c:forEach var="choice" items="${UserChoice}">
 		<tr>
 			<td>${choice.getTypeName()}</td>
 			<td>${choice.getPrice()}</td>

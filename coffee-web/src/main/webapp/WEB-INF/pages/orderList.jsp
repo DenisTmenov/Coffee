@@ -9,7 +9,7 @@
 <fmt:setBundle basename="com.coffee.i18n.orderList.messagesOrder" var="tableOrder_msgs"/>
 <fmt:setBundle basename="com.coffee.i18n.orderList.messagesLink" var="link_msgs"/>
 
-<form name="orderListform" onsubmit="true" action="Order" method="post">
+<form name="orderListform" onsubmit="true" action="OrderList" method="post">
 	<table class="table table-striped table-border width500 ">
 		<thead class="table-head">
 			<tr>
@@ -19,20 +19,24 @@
 		<tbody>
 			<tr>
 				<td><b><fmt:message bundle="${tableAddress_msgs}" key="tableFullName" /></b></td>
-				<td><input type="text" class="text" name="fullname"
-					id="fullname" /></td>
+				<td><input type="text" class="text" name="fullname"	id="fullname" value="${UserDelivery.getFullname()}" /></td>
 			</tr>
 			<tr>
 				<td><b><fmt:message bundle="${tableAddress_msgs}" key="tableAddress" /></b></td>
-				<td><input type="text" class="text" name="contactAddress"
-					id="contactAddress" /></td>
+				<td><input type="text" class="text" name="contactAddress" id="contactAddress" value="${UserDelivery.getAddress()}"/></td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="2" align="right"><input type="submit" name="btnOrderOK"
-					id="btnOrderOK" class="btn btn-primary" value="<fmt:message bundle="${tableAddress_msgs}" key="btnOrder" />"
-					 /></td>
+				<td colspan="2" align="right">
+					<font color="red">
+						<c:forEach var="errorsOrderList" items="${validationErrorsOrderListPage}"> 
+							<c:out value="${errorsOrderList.value}"></c:out>
+						</c:forEach> 
+					</font>
+						<input type="submit" name="btnOrderOK"
+						id="btnOrderOK" class="btn btn-primary" value="<fmt:message bundle="${tableAddress_msgs}" key="btnOrder" />" />
+				 </td>
 			</tr>
 		</tfoot>
 	</table>
@@ -55,24 +59,24 @@
 		<tr>
 			<td>${choice.getTypeName()}</td>
 			<td>${choice.getPrice()}</td>
-			<td>${choice.getCount()}</td>
+			<td>${choice.getQuantity()}</td>
 			<td>${choice.getTotalPrice()} TGR</td>
 			
 		</tr>
 			  </c:forEach>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyTotal" />:</b></td>
-			<td>${sumCost} TGR</td>
+			<td>${UserChoiceCost.getSumCost()} TGR</td>
 		</tr>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyDelivery" />:</b></td>
-			<td>${transport} TGR</td>
+			<td>${UserChoiceCost.getTransport()} TGR</td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyTotal" />:</b></td>
-			<td>${totalCost} TGR</td>
+			<td>${UserChoiceCost.getTotalCost()} TGR</td>
 		</tr>
 	</tfoot>
 

@@ -62,6 +62,11 @@ public class ConnectionPool {
 		closeConnection(connection);
 	}
 
+	public static void closeDbResources(Connection connection, PreparedStatement statement) {
+		closeStatement(statement);
+		closeConnection(connection);
+	}
+
 	private static void closeConnection(Connection connection) {
 		if (connection != null) {
 

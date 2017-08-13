@@ -23,7 +23,6 @@ import com.coffee.utils.StringUtils;
 public class CoffeeListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final String COFFEE_TYPE_LIST = "CoffeeTypeList";
 	private final Character DISABLE_COFFEE_ARGUMENT = 'Y';
 
 	private final String BUTTON_NAME = "btnMakeOrder";
@@ -51,7 +50,7 @@ public class CoffeeListController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
-
+		session = request.getSession();
 		transferDataFromDatabaseToThisPage(request);
 
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
@@ -61,13 +60,14 @@ public class CoffeeListController extends HttpServlet {
 	}
 
 	private void transferDataFromDatabaseToThisPage(HttpServletRequest request) {
-		if (coffeeType == null) {
+		if (session.getAttribute(LinkKeeper.COFFEE_TYPE_LIST) == null) {
 			coffeeType = loadDataFromDB();
-			setAttributeInSession(coffeeType, request);
 		}
 		if (session.getAttribute(LinkKeeper.USER_CHOICE) != null) {
 			session.removeAttribute(LinkKeeper.USER_CHOICE);
 		}
+
+		setAttributeInSession(coffeeType, request);
 	}
 
 	private List<CoffeeListDto> loadDataFromDB() {
@@ -87,22 +87,21 @@ public class CoffeeListController extends HttpServlet {
 			result.add(coffeeDto);
 		}
 		coffeeType = result;
-		session = request.getSession();
-		session.setAttribute(COFFEE_TYPE_LIST, result);
+
+		session.setAttribute(LinkKeeper.COFFEE_TYPE_LIST, result);
 
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		dropAllErrors();
 		initializeFields(request);
 
-		if (HttpUtils.isParameterExists(session, COFFEE_TYPE_LIST)) {
+		if (HttpUtils.isParameterExists(session, LinkKeeper.COFFEE_TYPE_LIST)) {
 			addCheckCountToDto(request);
-
 		}
+
 		if (allFieldIsOK(request)) {
-			dropAllErrors();
+			session.removeAttribute(LinkKeeper.VALIDATION_ERRORS_COFFEE_LIST_PAGE);
 			session.setAttribute(LinkKeeper.USER_CHOICE, userChoice);
 			HttpUtils.forwardToView(LinkKeeper.PAGE_ORDER_LIST, request, response);
 		} else {
@@ -115,7 +114,6 @@ public class CoffeeListController extends HttpServlet {
 		allParametersFromRequest = checkFieldMap(allParametersFromRequest, request);
 		errorMap = new HashMap<>();
 		session = request.getSession();
-
 	}
 
 	private Map<String, String> checkFieldMap(Map<String, String> map, HttpServletRequest request) {
@@ -153,9 +151,9 @@ public class CoffeeListController extends HttpServlet {
 			Integer checkId = Integer.parseInt(entry.getKey().replaceAll(JSP_COUNT_KEY, ""));
 			if (checkId == coffeeListDto.getId()) {
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					coffeeListDto.setCount(Integer.parseInt(entry.getValue()));
+					coffeeListDto.setQuantity(Integer.parseInt(entry.getValue()));
 				} else {
-					coffeeListDto.setCount(null);
+					coffeeListDto.setQuantity(null);
 				}
 			}
 		}
@@ -182,7 +180,7 @@ public class CoffeeListController extends HttpServlet {
 
 		for (Map.Entry<String, String> entry : allParametersFromRequest.entrySet()) {
 			if (entry.getKey().startsWith(JSP_CHECK_KEY)) {
-				dropErrorFromSession(CHECK_NOT_EXISTS_CODE);
+				HttpUtils.dropErrorFromSession(CHECK_NOT_EXISTS_CODE, errorMap, session, LinkKeeper.VALIDATION_ERRORS_COFFEE_LIST_PAGE);
 				return true;
 			}
 		}
@@ -199,8 +197,8 @@ public class CoffeeListController extends HttpServlet {
 			if (entry.getKey().startsWith(JSP_COUNT_KEY)) {
 				if (StringUtils.isNotEmpty(entry.getValue())) {
 					if (StringUtils.isNumeric(entry.getValue())) {
-						dropErrorFromSession(COUNT_NOT_EXISTS_CODE);
-						dropErrorFromSession(COUNT_IS_NOT_NUMERIC_CODE);
+						HttpUtils.dropErrorFromSession(COUNT_NOT_EXISTS_CODE, errorMap, session, LinkKeeper.VALIDATION_ERRORS_COFFEE_LIST_PAGE);
+						HttpUtils.dropErrorFromSession(COUNT_IS_NOT_NUMERIC_CODE, errorMap, session, LinkKeeper.VALIDATION_ERRORS_COFFEE_LIST_PAGE);
 						return true;
 					} else {
 						setErrorInSession(COUNT_IS_NOT_NUMERIC_CODE, COUNT_IS_NOT_NUMERIC_VALUE);
@@ -216,9 +214,9 @@ public class CoffeeListController extends HttpServlet {
 	private boolean numCheckEquelsNumCount(HttpServletRequest request) {
 		userChoice = new ArrayList<>();
 		for (CoffeeListDto entry : coffeeType) {
-			if (entry.getChecked() != null && entry.getCount() != null) {
-				if (entry.getCount() > 0) {
-					entry.setTotalPrice(entry.getPrice() * entry.getCount());
+			if (entry.getChecked() != null && entry.getQuantity() != null) {
+				if (entry.getQuantity() > 0) {
+					entry.setTotalPrice(entry.getPrice() * entry.getQuantity());
 					userChoice.add(entry);
 				}
 			}
@@ -234,22 +232,7 @@ public class CoffeeListController extends HttpServlet {
 
 	private void setErrorInSession(String code, String value) {
 		errorMap.put(code, value);
-		session.setAttribute(LinkKeeper.VALIDATION_ERRORS, errorMap);
+		session.setAttribute(LinkKeeper.VALIDATION_ERRORS_COFFEE_LIST_PAGE, errorMap);
 	}
 
-	private void dropAllErrors() {
-		dropErrorFromSession(CHECK_NOT_EXISTS_CODE);
-		dropErrorFromSession(COUNT_NOT_EXISTS_CODE);
-		dropErrorFromSession(COUNT_IS_NOT_NUMERIC_CODE);
-		dropErrorFromSession(CHECK_COUNT_ERROR_KEY);
-	}
-
-	private void dropErrorFromSession(String code) {
-		if (errorMap != null) {
-			if (errorMap.containsKey(code)) {
-				errorMap.remove(code);
-				session.setAttribute(LinkKeeper.VALIDATION_ERRORS, errorMap);
-			}
-		}
-	}
 }

@@ -1,8 +1,15 @@
 package com.coffee.utils;
 
 public final class LinkKeeper {
-	public static final String VALIDATION_ERRORS = "validationErrors";
+	public static final String VALIDATION_ERRORS_COFFEE_LIST_PAGE = "validationErrorsCoffeeListPage";
+	public static final String VALIDATION_ERRORS_ORDER_LIST_PAGE = "validationErrorsOrderListPage";
 	public static final String USER_CHOICE = "UserChoice";
+	public static final String USER_CHOICE_COST = "UserChoiceCost";
+	public static final String USER_DELIVERY = "UserDelivery";
+	public static final String COFFEE_TYPE_LIST = "CoffeeTypeList";
+
+	public static final String ORDER_ATTRIBUTE_CODE = "OrderIsOk";
+	public static final String ORDER_ATTRIBUTE_VALUE = "Ok";
 
 	public static final String PAGE_COFFEE_LIST = "CoffeeList";
 	public static final String PAGE_ORDER_LIST = "OrderList";

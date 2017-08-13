@@ -25,7 +25,7 @@
 			    <td align="center"><input type="checkbox" class="transform"	name="check${coffee.getId()}" id="check${coffee.getId()}"  ${coffee.getChecked()} /></td>
 			    <td>${coffee.getTypeName()}</td>
 			    <td>${coffee.getPrice()} TGR </td>
-				<td align="center"><input type="text" class="enterNumber"name="count${coffee.getId()}" id="count${coffee.getId()}"  value="${coffee.getCount()}"
+				<td align="center"><input type="text" class="enterNumber"name="count${coffee.getId()}" id="count${coffee.getId()}"  value="${coffee.getQuantity()}"
 					onkeypress="return isNumber(event)"	maxlength="3" /></td>
 			  </tr>
 			  </c:forEach>
@@ -34,8 +34,8 @@
 			<tr>
 				<td colspan="4" align="right">
 					<font color="red">
-						<c:forEach var="errors" items="${validationErrors}"> 
-							<c:out value="${errors.value}"></c:out>
+						<c:forEach var="errorsCoffeeList" items="${validationErrorsCoffeeListPage}"> 
+							<c:out value="${errorsCoffeeList.value}"></c:out>
 						</c:forEach> 
 					</font> <input type="submit"
 					class="btn btn-primary" id="btnMakeOrder" name="btnMakeOrder"

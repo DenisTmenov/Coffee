@@ -8,7 +8,7 @@ public class CoffeeListDto implements Serializable {
 	private Integer id;
 	private String typeName;
 	private Double price;
-	private Integer count;
+	private Integer quantity;
 	private Character disabled;
 	private Double totalPrice;
 	private String checked;
@@ -45,12 +45,12 @@ public class CoffeeListDto implements Serializable {
 		this.price = price;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setQuantity(Integer count) {
+		this.quantity = count;
 	}
 
 	public Double getTotalPrice() {
@@ -74,7 +74,7 @@ public class CoffeeListDto implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((checked == null) ? 0 : checked.hashCode());
-		result = prime * result + ((count == null) ? 0 : count.hashCode());
+		result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
 		result = prime * result + ((disabled == null) ? 0 : disabled.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
@@ -97,10 +97,10 @@ public class CoffeeListDto implements Serializable {
 				return false;
 		} else if (!checked.equals(other.checked))
 			return false;
-		if (count == null) {
-			if (other.count != null)
+		if (quantity == null) {
+			if (other.quantity != null)
 				return false;
-		} else if (!count.equals(other.count))
+		} else if (!quantity.equals(other.quantity))
 			return false;
 		if (disabled == null) {
 			if (other.disabled != null)
@@ -132,7 +132,8 @@ public class CoffeeListDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CoffeeListDto [id=" + id + ", typeName=" + typeName + ", price=" + price + ", count=" + count + ", disabled=" + disabled + ", totalPrice=" + totalPrice + ", checked=" + checked + "]";
+		return "CoffeeListDto [id=" + id + ", typeName=" + typeName + ", price=" + price + ", quantity=" + quantity + ", disabled=" + disabled + ", totalPrice=" + totalPrice
+				+ ", checked=" + checked + "]";
 	}
 
 }

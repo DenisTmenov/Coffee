@@ -50,6 +50,14 @@ public final class HttpUtils {
 		return StringUtils.isNotEmpty(valueStr);
 	}
 
+	public static boolean isAttributeExists(HttpServletRequest request, String paramName) {
+		if (StringUtils.isEmpty(paramName)) {
+			throwIllegalArgumentException(paramName);
+		}
+		String valueStr = (String) request.getAttribute(paramName);
+		return StringUtils.isNotEmpty(valueStr);
+	}
+
 	public static boolean isParameterExists(HttpSession session, String paramName) {
 		if (StringUtils.isEmpty(paramName)) {
 			throwIllegalArgumentException(paramName);
@@ -72,6 +80,15 @@ public final class HttpUtils {
 			rezult.put(attributeName, attributeValue);
 		}
 		return rezult;
+	}
+
+	public static void dropErrorFromSession(String codeForSearch, Map<?, ?> errorMap, HttpSession session, String nameInSession) {
+		if (errorMap != null) {
+			if (errorMap.containsKey(codeForSearch)) {
+				errorMap.remove(codeForSearch);
+				session.setAttribute(nameInSession, errorMap);
+			}
+		}
 	}
 
 }

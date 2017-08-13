@@ -2,10 +2,13 @@ package com.coffee.domian;
 
 import java.io.Serializable;
 
+import org.dozer.Mapping;
+
 public class DeliveryDto implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	@Mapping("name")
 	private String fullname;
+	@Mapping("deliveryAddress")
 	private String address;
 
 	public String getFullname() {

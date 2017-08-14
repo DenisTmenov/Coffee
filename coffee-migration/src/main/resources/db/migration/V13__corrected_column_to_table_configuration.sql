@@ -1,0 +1,1 @@
+ALTER TABLE configuration MODIFY value INTEGER not null;

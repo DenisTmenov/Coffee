@@ -107,22 +107,26 @@ public class OrderListController extends HttpServlet {
 
 	private void CalculateTotalAmountOrder(HttpSession session) {
 		Double sumCost = 0.0;
-		Double transport = 5.0;
+		Double shipping = 5.0; // get cost from DB !!!!!!!!!!!!!!
 		@SuppressWarnings("unchecked")
 		List<CoffeeListDto> userChoice = (List<CoffeeListDto>) session.getAttribute(LinkKeeper.USER_CHOICE);
 
 		if (userChoice != null) {
 			for (CoffeeListDto coffeeListDto : userChoice) {
+
+				// create method "if userCount of cups of coffee >= n (Count of identical cups
+				// of coffee.)" !!!!!!!!!!!!!
 				sumCost += coffeeListDto.getTotalPrice();
 			}
 
-			Double totalCost = sumCost + transport;
+			// create method "if sumCost >= x (Minimal cost without shipping cost.)"
+			Double totalCost = sumCost + shipping;
 
 			UserChoiceCostDto userChoiceCostDto = new UserChoiceCostDto();
 
 			userChoiceCostDto.setSumCost(sumCost);
 			userChoiceCostDto.setTotalCost(totalCost);
-			userChoiceCostDto.setTransport(transport);
+			userChoiceCostDto.setShipping(shipping);
 
 			setDtoToSession(session, userChoiceCostDto);
 		}

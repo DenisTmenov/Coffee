@@ -6,7 +6,7 @@ public class UserChoiceCostDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Double sumCost;
-	private Double transport;
+	private Double shipping;
 	private Double totalCost;
 
 	public UserChoiceCostDto() {
@@ -21,12 +21,12 @@ public class UserChoiceCostDto implements Serializable {
 		this.sumCost = sumCost;
 	}
 
-	public Double getTransport() {
-		return transport;
+	public Double getShipping() {
+		return shipping;
 	}
 
-	public void setTransport(Double transport) {
-		this.transport = transport;
+	public void setShipping(Double transport) {
+		this.shipping = transport;
 	}
 
 	public Double getTotalCost() {
@@ -43,7 +43,7 @@ public class UserChoiceCostDto implements Serializable {
 		int result = 1;
 		result = prime * result + ((sumCost == null) ? 0 : sumCost.hashCode());
 		result = prime * result + ((totalCost == null) ? 0 : totalCost.hashCode());
-		result = prime * result + ((transport == null) ? 0 : transport.hashCode());
+		result = prime * result + ((shipping == null) ? 0 : shipping.hashCode());
 		return result;
 	}
 
@@ -66,17 +66,17 @@ public class UserChoiceCostDto implements Serializable {
 				return false;
 		} else if (!totalCost.equals(other.totalCost))
 			return false;
-		if (transport == null) {
-			if (other.transport != null)
+		if (shipping == null) {
+			if (other.shipping != null)
 				return false;
-		} else if (!transport.equals(other.transport))
+		} else if (!shipping.equals(other.shipping))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "UserChoiceCostDto [sumCost=" + sumCost + ", transport=" + transport + ", totalCost=" + totalCost + "]";
+		return "UserChoiceCostDto [sumCost=" + sumCost + ", shipping=" + shipping + ", totalCost=" + totalCost + "]";
 	}
 
 }

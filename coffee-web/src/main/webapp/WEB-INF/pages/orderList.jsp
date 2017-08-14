@@ -70,7 +70,7 @@
 		</tr>
 		<tr>
 			<td colspan="3"><b><fmt:message bundle="${tableOrder_msgs}" key="tableBodyDelivery" />:</b></td>
-			<td>${UserChoiceCost.getTransport()} TGR</td>
+			<td>${UserChoiceCost.getShipping()} TGR</td>
 		</tr>
 	</tbody>
 	<tfoot>

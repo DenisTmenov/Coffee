@@ -7,8 +7,14 @@ import java.util.Properties;
 import com.coffee.exceptions.UtilsException;
 
 public class PropertiesClass {
+
+	private static final String PREFIX = "settings/";
+	private static final String POSTFIX = ".properties";
+	private static final String ERROR_MSG_READ = "Exception in reading properties.";
+	private static final String ERROR_MSG_CLOSE = "Exception in closing properties stream.";
+
 	public static Properties getSettings(String nameSettings) {
-		String settingsPath = "settings/" + nameSettings + ".properties";
+		String settingsPath = PREFIX + nameSettings + POSTFIX;
 
 		Properties properties = new Properties();
 		InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(settingsPath);
@@ -16,12 +22,12 @@ public class PropertiesClass {
 		try {
 			properties.load(stream);
 		} catch (IOException e) {
-			throw new UtilsException("Exception in reading properties.", e);
+			throw new UtilsException(ERROR_MSG_READ, e);
 		} finally {
 			try {
 				stream.close();
 			} catch (IOException e) {
-				throw new UtilsException("Exception in closing properties stream.", e);
+				throw new UtilsException(ERROR_MSG_CLOSE, e);
 			}
 		}
 

@@ -1,5 +1,6 @@
 CREATE TABLE configuration (
-  id VARCHAR(20) NOT null AUTO_INCREMENT, 
-  VALUE VARCHAR(30),
+  id int NOT null AUTO_INCREMENT, 
+  name VARCHAR (10),
+  value VARCHAR(30),
   PRIMARY KEY (id)
 ) ;

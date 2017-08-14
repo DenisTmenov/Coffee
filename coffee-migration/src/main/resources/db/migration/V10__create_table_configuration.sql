@@ -1,5 +1,5 @@
 CREATE TABLE configuration (
-  id VARCHAR(20) NOT null, 
+  id VARCHAR(20) NOT null AUTO_INCREMENT, 
   VALUE VARCHAR(30),
   PRIMARY KEY (id)
 ) ;

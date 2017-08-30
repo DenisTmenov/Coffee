@@ -76,17 +76,8 @@ public class OrderListController extends HttpServlet {
 				session.setAttribute(LinkKeeper.USER_DELIVERY, delivery);
 
 				if (errorMap.isEmpty()) {
-					@SuppressWarnings("unchecked")
-					List<CoffeeListDto> coffeeListDto = (List<CoffeeListDto>) session.getAttribute(LinkKeeper.COFFEE_TYPE_LIST);
-					UserChoiceCostDto userChoiceCostDto = (UserChoiceCostDto) session.getAttribute(LinkKeeper.USER_CHOICE_COST);
-					DeliveryDto deliveryDto = (DeliveryDto) session.getAttribute(LinkKeeper.USER_DELIVERY);
+					saveOrder(request, session);
 
-					DtoFactory dtoFactory = DtoFactory.getFactory();
-					dtoFactory.saveCoffeeOrder(coffeeListDto, userChoiceCostDto, deliveryDto);
-
-					removeAttrivutesFromSession(session);
-
-					request.setAttribute(LinkKeeper.ORDER_ATTRIBUTE_CODE, LinkKeeper.ORDER_ATTRIBUTE_VALUE);
 					HttpUtils.forwardToView(LinkKeeper.PAGE_ORDER, request, response);
 				} else {
 					session.setAttribute(LinkKeeper.VALIDATION_ERRORS_ORDER_LIST_PAGE, errorMap);
@@ -156,6 +147,24 @@ public class OrderListController extends HttpServlet {
 		session.removeAttribute(LinkKeeper.USER_CHOICE_COST);
 		session.removeAttribute(LinkKeeper.USER_DELIVERY);
 
+	}
+
+	private void saveOrder(HttpServletRequest request, HttpSession session) {
+		saveOrderToDB(session);
+
+		removeAttrivutesFromSession(session);
+
+		request.setAttribute(LinkKeeper.ORDER_ATTRIBUTE_CODE, LinkKeeper.ORDER_ATTRIBUTE_VALUE);
+	}
+
+	private void saveOrderToDB(HttpSession session) {
+		@SuppressWarnings("unchecked")
+		List<CoffeeListDto> coffeeListDto = (List<CoffeeListDto>) session.getAttribute(LinkKeeper.USER_CHOICE);
+		UserChoiceCostDto userChoiceCostDto = (UserChoiceCostDto) session.getAttribute(LinkKeeper.USER_CHOICE_COST);
+		DeliveryDto deliveryDto = (DeliveryDto) session.getAttribute(LinkKeeper.USER_DELIVERY);
+
+		DtoFactory dtoFactory = DtoFactory.getFactory();
+		dtoFactory.saveCoffeeOrder(coffeeListDto, userChoiceCostDto, deliveryDto);
 	}
 
 }

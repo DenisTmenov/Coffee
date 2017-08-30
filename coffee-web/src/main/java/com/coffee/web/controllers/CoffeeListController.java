@@ -61,34 +61,38 @@ public class CoffeeListController extends HttpServlet {
 
 	private void transferDataFromDatabaseToThisPage(HttpServletRequest request) {
 		if (session.getAttribute(LinkKeeper.COFFEE_TYPE_LIST) == null) {
-			coffeeType = loadDataFromDB();
+			loadDataFromDB();
 		}
 		if (session.getAttribute(LinkKeeper.USER_CHOICE) != null) {
 			session.removeAttribute(LinkKeeper.USER_CHOICE);
 		}
-
-		setAttributeInSession(coffeeType, request);
 	}
 
-	private List<CoffeeListDto> loadDataFromDB() {
+	private void loadDataFromDB() {
+		loadAllEnableCoffeeType();
+
+		if (coffeeType != null) {
+			session.setAttribute(LinkKeeper.COFFEE_TYPE_LIST, coffeeType);
+		}
+
+	}
+
+	private void loadAllEnableCoffeeType() {
 		DtoFactory mySqlFactory = DtoFactory.getFactory();
-		List<CoffeeListDto> coffeeType = mySqlFactory.getAllCoffeeType();
-		return coffeeType;
-	}
+		coffeeType = mySqlFactory.getAllCoffeeType();
 
-	private void setAttributeInSession(List<CoffeeListDto> coffeeList, HttpServletRequest request) {
-		List<CoffeeListDto> result = new ArrayList<>();
+		List<CoffeeListDto> dtoForDelete = new ArrayList<CoffeeListDto>();
 
-		for (CoffeeListDto coffeeDto : coffeeList) {
+		for (CoffeeListDto coffeeDto : coffeeType) {
 			Character disabled = coffeeDto.getDisabled();
 			if (disabled.equals(DISABLE_COFFEE_ARGUMENT)) {
-				continue;
+				dtoForDelete.add(coffeeDto);
 			}
-			result.add(coffeeDto);
 		}
-		coffeeType = result;
 
-		session.setAttribute(LinkKeeper.COFFEE_TYPE_LIST, result);
+		if (!dtoForDelete.isEmpty()) {
+			coffeeType.removeAll(dtoForDelete);
+		}
 
 	}
 
@@ -132,7 +136,7 @@ public class CoffeeListController extends HttpServlet {
 				addCount(entry, coffeeListDto);
 			}
 		}
-		setAttributeInSession(coffeeType, request);
+		// loadCoffeeType(coffeeType, request);
 	}
 
 	private void addCheck(Map.Entry<String, String> entry, CoffeeListDto coffeeListDto) {

@@ -7,6 +7,11 @@ public final class LinkKeeper {
 	public static final String USER_CHOICE_COST = "UserChoiceCost";
 	public static final String USER_DELIVERY = "UserDelivery";
 	public static final String COFFEE_TYPE_LIST = "CoffeeTypeList";
+	public static final String ACTION = "Action";
+
+	public static final String CONFIG_DELIVERY_NAME = "m";
+	public static final String CONFIG_COUNT_CUP_NAME = "n";
+	public static final String CONFIG_MINIMAL_COST_NAME = "x";
 
 	public static final String ORDER_ATTRIBUTE_CODE = "OrderIsOk";
 	public static final String ORDER_ATTRIBUTE_VALUE = "Ok";

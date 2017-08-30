@@ -8,6 +8,7 @@
 <fmt:requestEncoding value = "UTF-8" />
 
 <fmt:setBundle basename="com.coffee.i18n.coffeeList.messages" var="table_msgs"/>
+<fmt:setBundle basename="com.coffee.i18n.coffeeList.messagesAction" var="action_msgs"/>
 
 <form name="coffeeListForm" onsubmit="true" action="CoffeeList"	method="post">
 	<table class="table table-hover table-border width800 ">
@@ -43,5 +44,5 @@
 			</tr>
 		</tfoot>
 	</table>
-	<font color="red">*</font> - каждая третья чашка бесплатно.
+	<font color="red">*</font> - <fmt:message bundle="${action_msgs}" key="actionPrefix" /> ${Action} <fmt:message bundle="${action_msgs}" key="actionPostfix" />.
 </form>

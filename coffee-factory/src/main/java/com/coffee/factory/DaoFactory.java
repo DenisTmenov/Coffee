@@ -3,6 +3,7 @@ package com.coffee.factory;
 import com.coffee.dao.mysql.CoffeeOrderDao;
 import com.coffee.dao.mysql.CoffeeOrderItemDao;
 import com.coffee.dao.mysql.CoffeeTypeDao;
+import com.coffee.dao.mysql.ConfigurationDao;
 import com.coffee.exception.UnsupportedStoradgeTypeException;
 import com.coffee.factory.type.StoradgeTypes;
 
@@ -13,6 +14,8 @@ public abstract class DaoFactory {
 	public abstract CoffeeOrderDao getCoffeeOrder();
 
 	public abstract CoffeeOrderItemDao getCoffeeOrderItem();
+
+	public abstract ConfigurationDao getConfiguration();
 
 	public static DaoFactory getMySqlFactory() {
 		return getFactory(StoradgeTypes.MySql);

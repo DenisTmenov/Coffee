@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.coffee.domian.CoffeeListDto;
 import com.coffee.domian.DeliveryDto;
 import com.coffee.domian.UserChoiceCostDto;
+import com.coffee.entity.ConfigurationEntity;
 import com.coffee.factory.DtoFactory;
 import com.coffee.utils.HttpUtils;
 import com.coffee.utils.LinkKeeper;
@@ -38,6 +39,7 @@ public class OrderListController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpUtils.setEncoding(request, response);
+
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_MENU, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_ORDER_LIST, request, response);
@@ -97,35 +99,62 @@ public class OrderListController extends HttpServlet {
 	}
 
 	private void CalculateTotalAmountOrder(HttpSession session) {
+		DtoFactory dtoFactory = DtoFactory.getFactory();
+		List<ConfigurationEntity> configurationEntity = dtoFactory.getConfigurationDataFromDb();
+
+		Map<String, Double> configFromDB = getConfigFromDB(configurationEntity);
+
+		Double delivery = configFromDB.get(LinkKeeper.CONFIG_DELIVERY_NAME);
+		Double countCup = configFromDB.get(LinkKeeper.CONFIG_COUNT_CUP_NAME);
+		Double minimalCost = configFromDB.get(LinkKeeper.CONFIG_MINIMAL_COST_NAME);
+
 		Double sumCost = 0.0;
-		Double shipping = 5.0; // get cost from DB !!!!!!!!!!!!!!
+		Double totalCost = 0.0;
+
 		@SuppressWarnings("unchecked")
 		List<CoffeeListDto> userChoice = (List<CoffeeListDto>) session.getAttribute(LinkKeeper.USER_CHOICE);
 
 		if (userChoice != null) {
-			for (CoffeeListDto coffeeListDto : userChoice) {
-
-				// create method "if userCount of cups of coffee >= n (Count of identical cups
-				// of coffee.)" !!!!!!!!!!!!!
-				sumCost += coffeeListDto.getTotalPrice();
+			for (CoffeeListDto coffeeDto : userChoice) {
+				Integer countBonus = (int) (coffeeDto.getQuantity() / countCup);
+				Double total = coffeeDto.getPrice() * coffeeDto.getQuantity() - coffeeDto.getPrice() * countBonus;
+				sumCost += total;
+				coffeeDto.setTotalPrice(total);
 			}
 
-			// create method "if sumCost >= x (Minimal cost without shipping cost.)"
-			Double totalCost = sumCost + shipping;
+			if (sumCost < minimalCost) {
+				totalCost = sumCost + delivery;
+			} else {
+				totalCost = sumCost;
+				delivery = 0.0;
+			}
 
 			UserChoiceCostDto userChoiceCostDto = new UserChoiceCostDto();
 
 			userChoiceCostDto.setSumCost(sumCost);
 			userChoiceCostDto.setTotalCost(totalCost);
-			userChoiceCostDto.setShipping(shipping);
+			userChoiceCostDto.setShipping(delivery);
 
-			setDtoToSession(session, userChoiceCostDto);
+			session.setAttribute(LinkKeeper.USER_CHOICE_COST, userChoiceCostDto);
+			session.setAttribute(LinkKeeper.USER_CHOICE, userChoice);
 		}
 
 	}
 
-	private void setDtoToSession(HttpSession session, UserChoiceCostDto userChoiceCostDto) {
-		session.setAttribute(LinkKeeper.USER_CHOICE_COST, userChoiceCostDto);
+	private Map<String, Double> getConfigFromDB(List<ConfigurationEntity> configurationEntity) {
+		Map<String, Double> result = new HashMap<String, Double>();
+		for (ConfigurationEntity entity : configurationEntity) {
+			if (entity.getName().equals(LinkKeeper.CONFIG_DELIVERY_NAME)) {
+				result.put(LinkKeeper.CONFIG_DELIVERY_NAME, Double.valueOf(entity.getValue()));
+			}
+			if (entity.getName().equals(LinkKeeper.CONFIG_COUNT_CUP_NAME)) {
+				result.put(LinkKeeper.CONFIG_COUNT_CUP_NAME, Double.valueOf(entity.getValue()));
+			}
+			if (entity.getName().equals(LinkKeeper.CONFIG_MINIMAL_COST_NAME)) {
+				result.put(LinkKeeper.CONFIG_MINIMAL_COST_NAME, Double.valueOf(entity.getValue()));
+			}
+		}
+		return result;
 	}
 
 	private boolean buttonIsEnter(HttpServletRequest request) {

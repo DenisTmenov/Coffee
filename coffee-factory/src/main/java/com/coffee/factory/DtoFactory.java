@@ -9,12 +9,15 @@ import org.dozer.Mapper;
 import com.coffee.dao.mysql.CoffeeOrderDao;
 import com.coffee.dao.mysql.CoffeeOrderItemDao;
 import com.coffee.dao.mysql.CoffeeTypeDao;
+import com.coffee.dao.mysql.ConfigurationDao;
 import com.coffee.domian.CoffeeListDto;
 import com.coffee.domian.DeliveryDto;
 import com.coffee.domian.UserChoiceCostDto;
 import com.coffee.entity.CoffeeOrderEntity;
 import com.coffee.entity.CoffeeOrderItemEntity;
 import com.coffee.entity.CoffeeTypeEntity;
+import com.coffee.entity.ConfigurationEntity;
+import com.coffee.utils.LinkKeeper;
 
 public class DtoFactory {
 	private DtoFactory() {
@@ -76,4 +79,22 @@ public class DtoFactory {
 
 	}
 
+	public List<ConfigurationEntity> getConfigurationDataFromDb() {
+
+		DaoFactory daoFactory = DaoFactory.getMySqlFactory();
+
+		ConfigurationDao configurationDao = daoFactory.getConfiguration();
+
+		return configurationDao.getConfigurationDataFromDb();
+	}
+
+	public Integer getAction() {
+		List<ConfigurationEntity> list = getConfigurationDataFromDb();
+		for (ConfigurationEntity entity : list) {
+			if (entity.getName().equals(LinkKeeper.CONFIG_COUNT_CUP_NAME)) {
+				return entity.getValue();
+			}
+		}
+		return null;
+	}
 }

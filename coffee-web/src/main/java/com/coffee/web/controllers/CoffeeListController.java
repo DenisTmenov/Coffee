@@ -53,6 +53,10 @@ public class CoffeeListController extends HttpServlet {
 		session = request.getSession();
 		transferDataFromDatabaseToThisPage(request);
 
+		if (session.getAttribute(LinkKeeper.ACTION) == null) {
+			setActionToSession(session);
+		}
+
 		HttpUtils.includeView(LinkKeeper.JSP_HEADER, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_MENU, request, response);
 		HttpUtils.includeView(LinkKeeper.JSP_COFFEE_LIST, request, response);
@@ -96,6 +100,13 @@ public class CoffeeListController extends HttpServlet {
 
 	}
 
+	private void setActionToSession(HttpSession session) {
+		DtoFactory dtoFactory = DtoFactory.getFactory();
+		Integer action = dtoFactory.getAction();
+		session.setAttribute(LinkKeeper.ACTION, action);
+
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		initializeFields(request);
@@ -136,7 +147,7 @@ public class CoffeeListController extends HttpServlet {
 				addCount(entry, coffeeListDto);
 			}
 		}
-		// loadCoffeeType(coffeeType, request);
+
 	}
 
 	private void addCheck(Map.Entry<String, String> entry, CoffeeListDto coffeeListDto) {
@@ -220,7 +231,6 @@ public class CoffeeListController extends HttpServlet {
 		for (CoffeeListDto entry : coffeeType) {
 			if (entry.getChecked() != null && entry.getQuantity() != null) {
 				if (entry.getQuantity() > 0) {
-					entry.setTotalPrice(entry.getPrice() * entry.getQuantity());
 					userChoice.add(entry);
 				}
 			}

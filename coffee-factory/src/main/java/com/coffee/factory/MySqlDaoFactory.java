@@ -3,6 +3,7 @@ package com.coffee.factory;
 import com.coffee.dao.mysql.CoffeeOrderDao;
 import com.coffee.dao.mysql.CoffeeOrderItemDao;
 import com.coffee.dao.mysql.CoffeeTypeDao;
+import com.coffee.dao.mysql.ConfigurationDao;
 import com.coffee.exception.UnsupportedDaoTypeException;
 
 public class MySqlDaoFactory extends DaoFactory {
@@ -45,6 +46,19 @@ public class MySqlDaoFactory extends DaoFactory {
 			Object daoObject = daoClass.newInstance();
 
 			return ((CoffeeOrderItemDao) daoObject);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			throw new UnsupportedDaoTypeException();
+		}
+	}
+
+	@Override
+	public ConfigurationDao getConfiguration() {
+		try {
+			Class<?> daoClass = Class.forName("com.coffee.dao.mysql.ConfigurationDao");
+
+			Object daoObject = daoClass.newInstance();
+
+			return ((ConfigurationDao) daoObject);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			throw new UnsupportedDaoTypeException();
 		}
